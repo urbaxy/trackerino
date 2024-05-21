@@ -9,12 +9,12 @@ MainWindow::MainWindow ()
 	set_default_size (1200, 800);
 	set_border_width (10);
 
-	m_VBox_main.set_orientation (Gtk::ORIENTATION_VERTICAL);
-	m_VBox_main.set_margin_top (12);
-	m_VBox_main.set_margin_right (12);
-	m_VBox_main.set_margin_bottom (12);
-	m_VBox_main.set_margin_left (12);
-	m_VBox_main.set_spacing(6);
+	m_HBox_main.set_orientation (Gtk::ORIENTATION_HORIZONTAL);
+	m_HBox_main.set_margin_top (12);
+	m_HBox_main.set_margin_right (12);
+	m_HBox_main.set_margin_bottom (12);
+	m_HBox_main.set_margin_left (12);
+	m_HBox_main.set_spacing(6);
 
 	m_HBox.set_orientation (Gtk::ORIENTATION_HORIZONTAL);
 	m_HBox.set_margin_top (12);
@@ -65,13 +65,13 @@ MainWindow::MainWindow ()
 
 	m_MainArea.show ();
 
-	m_VBox_main.pack_start (m_HBox, Gtk::PACK_SHRINK);
-	m_VBox_main.pack_start (m_VBox, Gtk::PACK_SHRINK);
-	m_HBox.pack_start (m_MainArea, Gtk::PACK_SHRINK);
+	m_HBox_main.pack_start (m_VBox, Gtk::PACK_SHRINK);
+	m_HBox_main.pack_start (m_HBox, Gtk::PACK_SHRINK);
 	m_VBox.pack_start (m_ScrolledWindow);
 	m_VBox.pack_start (m_button, Gtk::PACK_SHRINK);
+	m_HBox.pack_start (m_MainArea, Gtk::PACK_SHRINK);
 
-	add (m_VBox_main);
+	add (m_HBox_main);
 
 	show_all_children ();
 
@@ -79,10 +79,10 @@ MainWindow::MainWindow ()
 	listTargets.push_back (Gtk::TargetEntry ("STRING"));
 	listTargets.push_back (Gtk::TargetEntry ("text/plain"));
 
-	m_MainArea.drag_source_set (listTargets);
-	m_MainArea.signal_drag_data_get ().connect (sigc::mem_fun(*this, &MainWindow::drag_data_get));
-	m_button.drag_dest_set (listTargets);
-	m_button.signal_drag_data_received ().connect(sigc::mem_fun (*this, &MainWindow::drop_drag_data_received) );
+	m_button.drag_source_set (listTargets);
+	m_button.signal_drag_data_get ().connect (sigc::mem_fun(*this, &MainWindow::drag_data_get));
+	m_MainArea.drag_dest_set (listTargets);
+	m_MainArea.signal_drag_data_received ().connect(sigc::mem_fun (*this, &MainWindow::drop_drag_data_received) );
 
 	driver = get_driver_instance ();
 	connection = driver->connect ("tcp://192.168.0.2:3306", "trackerino", "9mCDJ6dXdsSTht7H79L6sUoUYB27DLu9");

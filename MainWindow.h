@@ -25,7 +25,7 @@ class MainWindow : public Gtk::Window
 		void drag_data_get (const Glib::RefPtr<Gdk::DragContext>& context, Gtk::SelectionData& selection_data, guint info, guint time);
 		void drop_drag_data_received (const Glib::RefPtr<Gdk::DragContext>& context, int x, int y, const Gtk::SelectionData& selection_data, guint info, guint time);
 		Glib::RefPtr<Gtk::TreeStore> m_refTreeModel;
-		Gtk::Box m_VBox_main, m_HBox, m_VBox;
+		Gtk::Box m_HBox_main, m_HBox, m_VBox;
 		Gtk::Button m_button;
 		Gtk::ScrolledWindow m_ScrolledWindow;
 		Gtk::TreeView m_TreeView;
