@@ -4,7 +4,7 @@
 #include <gdkmm/pixbuf.h>
 
 MainArea::MainArea ()
-{	set_size_request (500, 500);
+{	set_size_request (1200, 800);
 }
 
 MainArea::~MainArea ()
@@ -14,7 +14,7 @@ MainArea::~MainArea ()
 bool MainArea::on_draw (const Cairo::RefPtr<Cairo::Context>& cr)
 {	Glib::RefPtr<Gdk::Pixbuf> image = Gdk::Pixbuf::create_from_file ("map.png");
 	Gdk::Cairo::set_source_pixbuf (cr, image, 100, 80);
-	cr->rectangle (110, 90, image->get_width ()-20, image->get_height ()-20);
+	cr->rectangle (110, 90, image->get_width () - 20, image->get_height () - 20);
 	cr->fill ();
 
 	Gtk::Allocation allocation = get_allocation ();
