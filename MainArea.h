@@ -1,3 +1,6 @@
+#ifndef GTKMM_MAINAREA_H
+#define GTKMM_MAINAREA_H
+
 #include <gtkmm/drawingarea.h>
 
 class MainArea : public Gtk::DrawingArea
@@ -8,3 +11,6 @@ class MainArea : public Gtk::DrawingArea
 	protected:
 		bool on_draw (const Cairo::RefPtr<Cairo::Context>& cr) override;
 };
+
+
+#endif

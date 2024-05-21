@@ -89,6 +89,8 @@ MainWindow::MainWindow ()
 	connection->setSchema ("trackerino");
 	stmt = connection->createStatement ();
 	stmt->execute ("CREATE TABLE IF NOT EXISTS activities (id INT auto_increment NOT NULL, name VARCHAR(30), CONSTRAINT id_PK PRIMARY KEY (id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci");
+	stmt->execute ("CREATE TABLE IF NOT EXISTS points (id INT auto_increment NOT NULL, CONSTRAINT id_PK PRIMARY KEY (id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci");
+
 	stmt->execute ("INSERT INTO activities (name) VALUES ('Laufen')");
 
 	pstmt = connection->prepareStatement ("SELECT id, name FROM activities ORDER BY name");
@@ -121,7 +123,7 @@ void MainWindow::drag_data_get (const Glib::RefPtr<Gdk::DragContext>&, Gtk::Sele
 {	selection_data.set (selection_data.get_target (), 8 /* 8 bits format */, (const guchar*)"I'm Data!", 9 /* the length of I'm Data! in bytes */);
 }
 
-void MainWindow::drop_drag_data_received ( const Glib::RefPtr<Gdk::DragContext>& context, int, int, const Gtk::SelectionData& selection_data, guint, guint time)
+void MainWindow::drop_drag_data_received (const Glib::RefPtr<Gdk::DragContext>& context, int, int, const Gtk::SelectionData& selection_data, guint, guint time)
 {	const int length = selection_data.get_length ();
 
 	if ((length >= 0) && (selection_data.get_format () == 8))
