@@ -75,6 +75,15 @@ MainWindow::MainWindow ()
 
 	show_all_children ();
 
+	std::vector<Gtk::TargetEntry> listTargets;
+	listTargets.push_back (Gtk::TargetEntry ("STRING"));
+	listTargets.push_back (Gtk::TargetEntry ("text/plain"));
+
+	m_MainArea.drag_source_set (listTargets);
+	m_MainArea.signal_drag_data_get ().connect (sigc::mem_fun(*this, &MainWindow::drag_data_get));
+	m_button.drag_dest_set (listTargets);
+	m_button.signal_drag_data_received ().connect(sigc::mem_fun (*this, &MainWindow::drop_drag_data_received) );
+
 	driver = get_driver_instance ();
 	connection = driver->connect ("tcp://192.168.0.2:3306", "trackerino", "9mCDJ6dXdsSTht7H79L6sUoUYB27DLu9");
 	connection->setSchema ("trackerino");
@@ -87,7 +96,7 @@ MainWindow::MainWindow ()
 	res->beforeFirst ();
 
 	while (res->next ())
-	{	cout << res->getInt ("id") << res->getString ("name") <<endl;
+	{	cout << res->getInt ("id") << " - " << res->getString ("name") <<endl;
 
 		childrow = *(m_refTreeModel->append (row.children ()));
 		childrow[m_Columns.m_col_id] = res->getInt ("id");
@@ -106,4 +115,18 @@ MainWindow::~MainWindow ()
 
 void MainWindow::on_button_clicked ()
 {	std::cout << "button clicked"  << std::endl;
+}
+
+void MainWindow::drag_data_get (const Glib::RefPtr<Gdk::DragContext>&, Gtk::SelectionData& selection_data, guint, guint)
+{	selection_data.set (selection_data.get_target (), 8 /* 8 bits format */, (const guchar*)"I'm Data!", 9 /* the length of I'm Data! in bytes */);
+}
+
+void MainWindow::drop_drag_data_received ( const Glib::RefPtr<Gdk::DragContext>& context, int, int, const Gtk::SelectionData& selection_data, guint, guint time)
+{	const int length = selection_data.get_length ();
+
+	if ((length >= 0) && (selection_data.get_format () == 8))
+	{	std::cout << "Received \"" << selection_data.get_data_as_string () << "\" in label " << std::endl;
+	}
+
+	context->drag_finish (false, false, time);
 }
