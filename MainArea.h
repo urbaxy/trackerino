@@ -12,5 +12,4 @@ class MainArea : public Gtk::DrawingArea
 		bool on_draw (const Cairo::RefPtr<Cairo::Context>& cr) override;
 };
 
-
 #endif

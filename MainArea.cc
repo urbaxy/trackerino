@@ -35,7 +35,7 @@ bool MainArea::on_draw (const Cairo::RefPtr<Cairo::Context>& cr)
 	cr->line_to (0, height);
 	cr->move_to (xc, yc);
 	cr->line_to (width, yc);
-	//cr->stroke ();
+	cr->stroke ();
 
 	return true;
 }

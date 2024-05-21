@@ -127,7 +127,7 @@ void MainWindow::drop_drag_data_received (const Glib::RefPtr<Gdk::DragContext>& 
 {	const int length = selection_data.get_length ();
 
 	if ((length >= 0) && (selection_data.get_format () == 8))
-	{	std::cout << "Received \"" << selection_data.get_data_as_string () << "\" in label " << std::endl;
+	{	std::cout << "Received \"" << selection_data.get_data_as_string () << "\" in button " << std::endl;
 	}
 
 	context->drag_finish (false, false, time);
