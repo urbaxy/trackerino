@@ -1,5 +1,10 @@
 #include "MainWindow.h"
+#include <fstream>
 #include <iostream>
+
+#include "fit_decode.hpp"
+//#include "fit_mesg_broadcaster.hpp"
+//#include "fit_developer_field_description.hpp"
 
 using namespace sql;
 using namespace std;
@@ -91,7 +96,7 @@ MainWindow::MainWindow ()
 	stmt->execute ("CREATE TABLE IF NOT EXISTS activities (id INT auto_increment NOT NULL, name VARCHAR(30), CONSTRAINT id_PK PRIMARY KEY (id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci");
 	stmt->execute ("CREATE TABLE IF NOT EXISTS points (id INT auto_increment NOT NULL, CONSTRAINT id_PK PRIMARY KEY (id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci");
 
-	stmt->execute ("INSERT INTO activities (name) VALUES ('Laufen')");
+	//stmt->execute ("INSERT INTO activities (name) VALUES ('Laufen')");
 
 	pstmt = connection->prepareStatement ("SELECT id, name FROM activities ORDER BY name");
 	res = pstmt->executeQuery ();
@@ -109,6 +114,8 @@ MainWindow::MainWindow ()
 	delete pstmt;
 	delete stmt;
 	delete connection;
+
+	MainWindow::importFit ();
 }
 
 MainWindow::~MainWindow ()
@@ -131,4 +138,40 @@ void MainWindow::drop_drag_data_received (const Glib::RefPtr<Gdk::DragContext>& 
 	}
 
 	context->drag_finish (false, false, time);
+}
+
+void MainWindow::importFit()
+{	fit::Decode decode;
+	fit::MesgBroadcaster mesgBroadcaster;
+
+	ifstream fitfile ("D9GB4449.FIT", ios::binary);
+
+	if (fitfile.is_open ())
+	{	decode.CheckIntegrity (fitfile);
+
+		mesgBroadcaster.AddListener ((fit::FileIdMesgListener &)fitListener);
+		mesgBroadcaster.AddListener ((fit::UserProfileMesgListener &)fitListener);
+		mesgBroadcaster.AddListener ((fit::MonitoringMesgListener &)fitListener);
+		mesgBroadcaster.AddListener ((fit::DeviceInfoMesgListener &)fitListener);
+		mesgBroadcaster.AddListener ((fit::RecordMesgListener&)fitListener);
+		mesgBroadcaster.AddListener ((fit::MesgListener &)fitListener);
+
+		try
+		{	decode.Read (&fitfile, &mesgBroadcaster, &mesgBroadcaster, &fitListener);
+		}
+
+	 	catch (const fit::RuntimeException& e)
+		{	printf ("Exception decoding file: %s\n", e.what ());
+		}
+
+		catch (...)
+		{	printf ("Exception decoding file");
+		}
+
+		fitfile.close ();
+	}
+
+	else cout << "Unable to open file"; 
+
+	exit (0);
 }
