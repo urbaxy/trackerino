@@ -3,8 +3,6 @@
 #include <iostream>
 
 #include "fit_decode.hpp"
-//#include "fit_mesg_broadcaster.hpp"
-//#include "fit_developer_field_description.hpp"
 
 using namespace sql;
 using namespace std;
@@ -90,7 +88,7 @@ MainWindow::MainWindow ()
 	m_MainArea.signal_drag_data_received ().connect(sigc::mem_fun (*this, &MainWindow::drop_drag_data_received) );
 
 	driver = get_driver_instance ();
-	connection = driver->connect ("tcp://192.168.0.2:3306", "trackerino", "9mCDJ6dXdsSTht7H79L6sUoUYB27DLu9");
+	connection = driver->connect ("tcp://192.168.0.2:3306", "trackerino", "");
 	connection->setSchema ("trackerino");
 	stmt = connection->createStatement ();
 	stmt->execute ("CREATE TABLE IF NOT EXISTS activities (id INT auto_increment NOT NULL, name VARCHAR(30), CONSTRAINT id_PK PRIMARY KEY (id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci");

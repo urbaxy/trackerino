@@ -12,7 +12,7 @@
 
 ## compiling
 ```
-g++ -c *.cpp
+g++ -std=c++17 -c *.cpp
 g++ -std=c++17 -c *.cc $(pkg-config --cflags --libs gtkmm-3.0) -lmysqlcppconn
 g++ -std=c++17 *.o -o trackerino $(pkg-config --cflags --libs gtkmm-3.0) -lmysqlcppconn
 ```

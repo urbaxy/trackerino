@@ -4,7 +4,6 @@
 #include <fstream>
 #include <iostream>
 
-//#include "fit_decode.hpp"
 #include "fit_mesg_broadcaster.hpp"
 #include "fit_developer_field_description.hpp"
 
